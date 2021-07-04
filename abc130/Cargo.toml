@@ -1,0 +1,22 @@
+[package]
+name = "abc130"
+version = "0.1.0"
+authors = ["Yuji Nagaoka <yuji.nagaoka@icloud.com>"]
+edition = "2018"
+
+# usage
+# ~/Library/Preferencesのリンクを書き換える
+# alias ca='cargo atcoder'
+# alias cas='cargo atcoder submit'
+# alias cate='cargo atcoder test'
+# alias crun='cargo run --bin'
+# unsetopt correct
+
+
+# dependencies added to new project
+[dependencies]
+ proconio = { version = "0.3.6", features = ["derive"] }
+
+[profile.release]
+lto = true
+panic = 'abort'
