@@ -7,40 +7,25 @@ INF = 10**20
 
 def solve():
     N = int(input())
-    LR = defaultdict(list)
-
+    LR = []
     for _ in range(N):
-        L, R = list(map(int, input().split()))
-        LR[L].append(R)
+        L, R = map(int, input().split())
+        LR.append((L, R))
+    LR.sort()
+    LR.append((INF, INF))
+    pq = []  # priority queue
 
-    Ls = list(LR.keys()) + [INF]
-    Ls.sort()
+    x = 1
 
-    l = 1
-    c = 0
-    Q = []
-    while c != N:
-        # search index
-        i = bisect.bisect_left(Ls, l)
-        if Ls[i] == l:
-            for r in LR[l]:
-                heapq.heappush(Q, r)
-
-        if not Q:
-            l = Ls[bisect.bisect_left(Ls, l)]
-            continue
-
-        r = heapq.heappop(Q)
-        if r < l:
-            break
-
-        l += 1
-        c += 1
-
-    if c == N:
-        print("Yes")
-    else:
-        print("No")
+    for (l, r) in LR:
+        while x < l and pq:
+            if (heapq.heappop(pq) < x):
+                print("No")
+                return
+            x += 1
+        x = l
+        heapq.heappush(pq, r)
+    print("Yes")
 
 
 T = int(input())
