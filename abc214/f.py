@@ -1,22 +1,22 @@
 S = input()
 MOD = 10**9 + 7
+
+INF = 10**14
 N = len(S)
-dp = [0] * (N+2)
+nxc = [[N+1] * 26 for _ in range(N+3)]
 
-dp[0] = 1
-INF = 10**20
+for i in range(N-1, -1, -1):
+    ind = ord(S[i]) - ord('a')  # 0 ~ 25
+    nxc[i] = nxc[i+1][:]
+    nxc[i][ind] = i
 
-ans = 0
+dp = [0]*(N+4)
+dp[-2] = 1
 
-for i in range(N):
-    for j in range(i, -1, -1):
-        dp[i+2] += dp[j]
-        dp[i+2] %= MOD
 
-        if j and S[j-1] == S[i]:
-            break
+for i in range(-2, N):
+    for nx in nxc[i+2]:
+        dp[nx] += dp[i]
+        dp[nx] %= MOD
 
-    ans += dp[i+2]
-    ans %= MOD
-
-print(ans % MOD)
+print(sum(dp[0:N+1]) % MOD)
