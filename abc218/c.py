@@ -83,12 +83,11 @@ def m(s, t):
     return True
 
 
-def rot(t):
-    ret = [['_'] * n for _ in range(n)]
-    for i in range(n):
-        for j in range(n):
-            ret[i][j] = t[n-j-1][i]
-    return ret
+def rot(s):
+    '''
+    二次元配列を90度回転
+    '''
+    return list(zip(*s[::-1]))
 
 
 for c in range(4):
