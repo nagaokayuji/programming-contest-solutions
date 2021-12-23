@@ -9,3 +9,11 @@ from heapq import heappush, heappop, heapify, heappushpop, heapreplace
 def input(): return sys.stdin.readline().rstrip()
 def mi(): return map(int, input().split())
 def li(): return list(mi())
+
+
+N, M = mi()
+AB = [tuple(mi()) for _ in range(M)]
+
+g = [[] for _ in range(N)]
+for a, b in AB:
+    g[a-1].append(b-1)
