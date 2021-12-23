@@ -11,10 +11,8 @@ A = li()
 INF = 10**9
 dp = [[INF]*(2*N) for _ in range(2*N)]
 
-for i in range(2*N):
-    dp[i][i] = 0
-# for i in range(2*N-1):
-#     dp[i][i+1] = abs(A[i]-A[i+1])
+for i in range(2*N-1):
+    dp[i][i+1] = abs(A[i]-A[i+1])
 
 for width in range(2, 2*N+1, 2):
     for l in range(2*N-1):
