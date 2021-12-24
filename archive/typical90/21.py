@@ -12,6 +12,9 @@ def mi(): return map(int, input().split())
 def li(): return list(mi())
 
 
+sys.setrecursionlimit(1111111)
+
+
 class SCC:
     def __init__(self, n: int):
         ''' n: num of nodes'''
@@ -44,23 +47,26 @@ class SCC:
                     dfs(nx)
             order.append(v)
 
-        def rdfs(v: int, k: int):
+        def rdfs(v: int, group_label: int):
             used[v] = True
-            group[v] = k
+            group[v] = group_label
             for nx in self.rg[v]:
                 if not used[nx]:
-                    rdfs(nx, k)
+                    rdfs(nx, group_label)
 
         for v in range(n):
             if not used[v]:
                 dfs(v)
+
         used = [False] * n
-        k = 0
+        group_label = 0
+
         for i in range(n-1, -1, -1):
             if not used[order[i]]:
-                rdfs(order[i], k)
-                k += 1
-        return k, group
+                rdfs(order[i], group_label)
+                group_label += 1
+
+        return group_label, group
 
 
 N, M = mi()
