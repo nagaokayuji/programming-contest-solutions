@@ -17,55 +17,67 @@ class SCC:
         ''' n: num of nodes'''
         self.n = n
         self.g = [[] for _ in range(n)]
+        self.rg = [[] for _ in range(n)]
 
     def from_graph(self, g: List[List[int]]):
-        self.n = len(g)
+        self.n = n = len(g)
         self.g = g.copy()
+        self.rg = [[] for _ in range(n)]
+        for v in range(n):
+            for to in g[v]:
+                self.rg[to].append(v)
 
-    def scc():
-        pass
+    def add_edge(self, _from: int, to: int):
+        self.g[_from].append(to)
+        self.rg[to].append(_from)
+
+    def scc(self):
+        n = self.n
+        group = [None] * n  # トポロジカル順序
+        used = [False] * n
+        order = []  # 帰りがけ順の並び
+
+        def dfs(v: int):
+            used[v] = True
+            for nx in self.g[v]:
+                if not used[nx]:
+                    dfs(nx)
+            order.append(v)
+
+        def rdfs(v: int, k: int):
+            used[v] = True
+            group[v] = k
+            for nx in self.rg[v]:
+                if not used[nx]:
+                    rdfs(nx, k)
+
+        for v in range(n):
+            if not used[v]:
+                dfs(v)
+        used = [False] * n
+        k = 0
+        for i in range(n-1, -1, -1):
+            if not used[order[i]]:
+                rdfs(order[i], k)
+                k += 1
+        return k, group
 
 
-class RollingHash():
-    def __init__(self, s: str, base=10007, mod=2**61 - 1):
-        n = len(s)
-        self.mod = mod
-        self.hash = hash = [0]*(n+1)
-        self.pw = pw = [1]*(len(s)+1)
+N, M = mi()
+AB = [tuple(mi()) for _ in range(M)]
 
-        for i in range(n):
-            pw[i+1] = pw[i] * base % mod
+g = [[] for _ in range(N)]
+for a, b in AB:
+    g[a-1].append(b-1)
 
-        for i in range(n):
-            hash[i+1] = (hash[i] * base + ord(s[i])) % mod
+scc = SCC(N)
+scc.from_graph(g)
+k, group = scc.scc()
+gc = [0]*N
+for gr in group:
+    gc[gr] += 1
 
-    def get(self, l: int, r: int):
-        '''
-        get hash of [l,r)  (0-indexed)
-        '''
-        return (self.hash[r] - self.hash[l] * self.pw[r-l]) % self.mod
-
-
-rh = RollingHash("hogehogestring")
-assert(rh.get(0, 1) == rh.get(4, 5))
-assert(rh.get(0, 2) == rh.get(4, 6))
-assert(rh.get(0, 3) == rh.get(4, 7))
-assert(rh.get(0, 4) == rh.get(4, 8))
-
-# N, M = mi()
-# AB = [tuple(mi()) for _ in range(M)]
-
-# g = [[] for _ in range(N)]
-# for a, b in AB:
-#     g[a-1].append(b-1)
-
-print(rh.get(0, 1))
-print(rh.get(0, 2))
-print(rh.get(0, 3))
-print(rh.get(0, 4))
-print(rh.get(0, 5))
-print(rh.get(4, 5))
-print(rh.get(4, 6))
-print(rh.get(4, 7))
-print(rh.get(4, 8))
-print(rh.get(4, 9))
+ans = 0
+for i in range(N):
+    ans += gc[i]*(gc[i]-1)//2
+print(ans)
