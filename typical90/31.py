@@ -18,3 +18,4 @@ grundy = [[None]*1444 for _ in range(55)]
 
 for w in range(52):
     for b in range(1442):
+        pass
