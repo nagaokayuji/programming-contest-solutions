@@ -1,4 +1,3 @@
-from pprint import pprint
 import sys
 def input(): return sys.stdin.readline().rstrip()
 def mi(): return map(int, input().split())
@@ -7,12 +6,10 @@ def ti(): return tuple(mi())
 
 
 N, K = mi()
-AB = sorted([ti() for _ in range(N)], key=lambda x: (-x[0], -x[1]))
 ps = []
-for a, b in AB:
+for a, b in [ti() for _ in range(N)]:
     ps.append(b)
     ps.append(a-b)
 
-ps.sort()
-ps.reverse()
+ps.sort(reverse=True)
 print(sum(ps[:K]))
