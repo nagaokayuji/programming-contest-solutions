@@ -7,3 +7,4 @@
 **/target/*
 **/*.nbc
 **/*.nbi
+**.out
