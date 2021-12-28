@@ -11,16 +11,15 @@ Qs = [ti() for _ in range(Q)]
 shift = 0
 ans = []
 for t, x, y in Qs:
+    x -= 1
+    y -= 1
     if t == 1:
-        x -= 1
-        y -= 1
         A[(x+shift) % N], A[(y+shift) % N] = A[(y+shift) % N], A[(x+shift) % N]
 
     elif t == 2:
         shift = (shift + N-1) % N
 
     else:
-        x -= 1
         ans.append(str(A[(x+shift) % N]))
 
 print(*ans)
