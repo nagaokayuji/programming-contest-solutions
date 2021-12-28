@@ -1,5 +1,6 @@
+import numba
 import sys
-from numba import njit, b1, i1, i4, i8, f8
+from numba import jitclass, njit, void, b1, i1, i4, i8, f8
 import numpy as np
 INF = float('inf')
 def input(): return sys.stdin.readline().rstrip()
@@ -8,6 +9,7 @@ def li(): return list(mi())
 def ti(): return tuple(mi())
 
 
+print(print(numba.__version__))
 MOD = 10**9 + 7
 
 K = int(input())
