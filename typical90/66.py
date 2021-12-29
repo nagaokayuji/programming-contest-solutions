@@ -20,10 +20,16 @@ def calc(l, r, nl, nr):
     return cnt/all
 
 
+@njit(f8(i8, i8[:], i8[:]), cache=True)
+def solve(N, L, R):
+    ans = 0
+    for i in range(N):
+        for j in range(i+1, N):
+            ans += calc(L[i], R[i], L[j], R[j])
+    return ans
+
+
 N = int(input())
-LR = [ti() for _ in range(N)]
-ans = 0
-for i, (l, r) in enumerate(LR):
-    for nl, nr in LR[i+1:]:
-        ans += calc(l, r, nl, nr)
-print(ans)
+LR = np.array([ti() for _ in range(N)])
+
+print(solve(N, LR[:, 0], LR[:, 1]))
