@@ -18,13 +18,11 @@ for a, b in ab:
     g[a].append(b)
     g[b].append(a)
 
-dp = [[0]*3 for _ in range(N)]
 
 MOD = 10**9 + 7
 
 
 def dfs(now, prv):
-    global dp
     v1 = 1
     v2 = 1
     for nx in g[now]:
@@ -46,6 +44,8 @@ def dfs(now, prv):
         dp[now][1] = v1
         dp[now][2] = v2-v1
 
+
+dp = [[0]*3 for _ in range(N)]
 
 dfs(0, -1)
 print((dp[0][2] % MOD + MOD) % MOD)
