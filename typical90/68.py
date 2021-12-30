@@ -56,4 +56,26 @@ class DSU:
 N = int(input())
 Q = int(input())
 dsu = DSU(N)
-TXYV = [ti() for _ in range(Q)]
+TXYV = [li() for _ in range(Q)]
+cnts = [0]*(N-1)
+for i in range(Q):
+    TXYV[i][1] -= 1
+    TXYV[i][2] -= 1
+    if TXYV[i][0] == 0:
+        cnts[TXYV[i][1]] = TXYV[i][3]
+
+ps = [0]*N
+for i in range(N-1):
+    ps[i+1] = cnts[i]-ps[i]
+
+for t, x, y, v in TXYV:
+    if t == 0:
+        dsu.merge(x, y)
+    else:
+        if not dsu.same(x, y):
+            print("Ambiguous")
+            continue
+        if (x ^ y) & 1 == 0:
+            print(v + ps[y]-ps[x])
+        else:
+            print(v+ps[x]+ps[y]-2*v)
