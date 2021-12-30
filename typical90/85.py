@@ -10,12 +10,11 @@ def readli(): return list(readmi())
 def readti(): return tuple(readmi())
 def readi(): return int(input())
 
-
 '''
 '''
 
 
-@njit(i8[:](i8))
+@njit(i8[:](i8), cache=True)
 def f(K):
     fs = set()
     fs.add(1)
@@ -28,7 +27,7 @@ def f(K):
     return ll
 
 
-@njit(i8(i8, i8, i8[:]))
+@njit(i8(i8, i8, i8[:]), cache=True)
 def g(n, K, ll):
     n = len(ll)
     ans = 0
