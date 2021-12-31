@@ -5,8 +5,8 @@ from itertools import permutations, combinations, product, combinations_with_rep
 from math import sqrt, gcd, factorial, pi, cos, sin
 from bisect import bisect_left, bisect_right
 from heapq import heappush, heappop, heapify, heappushpop, heapreplace
-# from numba import njit, void, b1, i1, i4, i8, f8
-# import numpy as np
+from numba import njit, void, b1, i1, i4, i8, f8
+import numpy as np
 # from numpy import searchsorted
 INF = float('inf')
 def input(): return sys.stdin.readline().rstrip()
@@ -16,37 +16,20 @@ def readti(): return tuple(readmi())
 def readi(): return int(input())
 
 
-class SmallestPrimeFactors:
-    '''
-    高速素因数分解
-    最小の素数を返す
-    O(N log N)
-    '''
-
-    def __init__(self, N: int):
-        table = [i for i in range(N+1)]
-        i = 2
-        while i*i <= N:
-            if table[i] == i:
-                j = i
-                while j <= N:
-                    if table[j] == j:
-                        table[j] = i
-                    j += i
-            i += 1
-        self._table = table
-
-    def prime_factorize(self, N: int):
-        factors = []
-        n = N
-        while n > 1:
-            factor = self._table[n]
-            n //= factor
-            factors.append(factor)
-        return factors
-
-
-def solve(N, table):
+@njit(i8(i8), cache=True)
+def solve(N):
+    table = np.zeros(N+1, dtype=np.int64)
+    for i in range(1, N+1):
+        table[i] = i
+    i = 2
+    while i*i <= N:
+        if table[i] == i:
+            j = i
+            while j <= N:
+                if table[j] == j:
+                    table[j] = i
+                j += i
+        i += 1
     ans = 0
     for k in range(1, N+1):
         _n = k
@@ -67,15 +50,9 @@ def solve(N, table):
 
 def _solve():
     N = readi()
-    spf = SmallestPrimeFactors(N)
-    # t = np.array(spf._table)
-    t = spf._table
-    # print(t)
-    print(solve(N, t))
+    print(solve(N))
     return
 
 
 if __name__ == '__main__':
-    sys.setrecursionlimit(10**8)
-    MOD = 10**9+7
     _solve()
