@@ -28,7 +28,7 @@ class ModComb:
     def comb(self, n, k):
         if n < k or n < 0 or k < 0:
             return 0
-        return self.factorial[n] * self.inv_factorial[k] * self.inv_factorial[n-k] % self.MOD
+        return (self.factorial[n] * self.inv_factorial[k] % self.MOD) * self.inv_factorial[n-k] % self.MOD
 
 
 def _solve():
@@ -48,7 +48,6 @@ def _solve():
                     md.comb(length, usecount)
                 dp2[length] %= MOD
         dp = dp2
-    # print(dp)
     print(sum(dp[1:]) % MOD)
 
 
