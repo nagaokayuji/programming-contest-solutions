@@ -20,21 +20,14 @@ const ll MX = 1e6 + 5, INF = 5LL << 58, MOD = 1e9 + 7;
 
 using mint = modint998244353;
 
-mint com[5050][5050];
 mint fact[MX + 1];
+mint ifact[MX + 1];
 void init() {
     fact[0] = fact[1] = 1;
     rep(i, 2, MX) fact[i] = fact[i - 1] * i;
-
-    com[0][0] = 1;
-    rep(i, 1, 5049) {
-        com[i][0] = 1;
-        rep(j, 1, 5049) { com[i][j] = com[i - 1][j - 1] + com[i - 1][j]; }
-    }
+    rep(i, 0, MX) ifact[i] = fact[i].inv();
 }
-mint comb(int n, int k) {
-    return com[n][k];
-}  // return fact[n] / fact[k] / fact[n - k]; }
+mint comb(int n, int k) { return fact[n] * ifact[k] * ifact[n - k]; }
 
 void solve() {
     init();
