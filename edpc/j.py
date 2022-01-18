@@ -21,22 +21,21 @@ def _solve():
     for three in range(N+1):
         for two in range(N+1):
             for one in range(N+1):
-                if one+two+three > N:
+                sum = one+two+three
+                if sum > N or sum == 0:
                     continue
-                '''
-                dp[one+1][two-1][three] += dp[one][two][three] + two/N
-                dp[one][two][three] += dp[one+1][two][three] + one/N
-                '''
+
+                dp[one][two][three] += N
                 if one > 0:
-                    dp[one][two][three] += dp[one-1][two][three] + (one-1)/N
-                    # dp[one-1][two][three] += dp[one][two][three] + one/N
+                    dp[one][two][three] += dp[one-1][two][three]*one
                 if two > 0:
                     # dp[one+1][two-1][three] += dp[one][two][three] + two/N
-                    dp[one][two][three] += dp[one][two-1][three] + two/N
+                    dp[one][two][three] += dp[one+1][two-1][three] * two
                 if three > 0:
-                    dp[one][two+1][three-1] += dp[one][two][three] + three/N
+                    dp[one][two][three] += dp[one][two+1][three-1] * three
+                dp[one][two][three] /= sum
 
-    pprint(dp)
+    # pprint(dp)
     print(dp[counts[1]][counts[2]][counts[3]])
 
     return
