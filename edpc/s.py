@@ -18,10 +18,7 @@ def _solve():
     K = list(map(int, list(input())))
     N = len(K)
     D = int(input())
-    dp = defaultdict(int)
     dp = [[[0] * D for _ in range(2)] for _ in range(N+1)]
-
-    # dp[i,j,k] := i文字目, j:strict, k: modD の個数
 
     dp[0][1][0] = 1
 
