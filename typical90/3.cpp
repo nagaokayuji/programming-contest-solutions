@@ -7,8 +7,8 @@ using namespace std;
 #define rep2(i,a)for(int i=0;i<a;i++)
 #define rep3(i,a,b)for(int i=a;i<b;i++)
 #define rep4(i,a,b,c)for(int i=a;i<b;i+=c)
-#define overload4(a, b, c, d, e, ...) e
-#define range(...) overload4(__VA_ARGS__, rep4, rep3, rep2, rep1)(__VA_ARGS__)
+#define overload4(a,b,c,d,e,...) e
+#define range(...)overload4(__VA_ARGS__,rep4,rep3,rep2,rep1)(__VA_ARGS__)
 #define all(v) v.begin(), v.end()
 #define each(x, A) for(auto&& x :A)
 template<class T>inline bool chmin(T &a,const T &b) {bool cmp=a>b;if(a>b)a=b;return cmp;}
@@ -28,33 +28,38 @@ ostream &operator<<(ostream &os,const mint x){os<<x.val();return os;}
 // clang-format on
 
 void _solve() {
-    Int N, L, K;
-    cin >> N >> L >> K;
-    V<Int> A(N);
-    cin >> A;
-
-    Int ok = 0;
-    Int ng = 1e15;
-    while (ng - ok > 1) {
-        Int mid = (ok + ng) / 2;
-        auto isOk = [&](Int mid) -> bool {
-            Int cnt = 0;
-            Int prev = 0;
-            each(x, A) if (x - prev >= mid && L - x >= mid) {
-                cnt++;
-                prev = x;
-            }
-            return cnt >= K;
-        };
-        if (isOk(mid))
-            ok = mid;
-        else
-            ng = mid;
+    int N;
+    cin >> N;
+    V<V<int>> edges(N);
+    range(i, N - 1) {
+        int a, b;
+        cin >> a >> b;
+        a--;
+        b--;
+        edges[a].push_back(b);
+        edges[b].push_back(a);
+    }
+    // diameter?
+    // diameter + 1;
+    int mxv = 0, mxd = 0;
+    auto dfs = [&](auto self, int v, int prv = -1, int depth = 0) -> void {
+        if (chmax(mxd, depth)) mxv = v;
+        each(x, edges[v]) {
+            if (x == prv) continue;
+            self(self, x, v, depth + 1);
+        }
     };
-    std::cout << ok << endl;
+    dfs(dfs, 0);
+    int fr = mxv;
+    mxv = 0, mxd = 0;
+    dfs(dfs, fr);
+    cout << mxd + 1 << endl;
 }
 
 signed main() {
+    cout << setprecision(12);
+    ios::sync_with_stdio(false);
+    assert(true);
     _solve();
     return 0;
 }
