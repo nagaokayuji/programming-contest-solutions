@@ -19,8 +19,8 @@ template<class T1,class T2>ostream &operator<<(ostream &stream, const map<T1, T2
 template<class T,size_t sz>ostream &operator<<(ostream &os, const array<T, sz> &arr) {os << '[';for(auto v: arr)os<<v<<", ";os <<']';return os;}
 template<class T>using V=vector<T>;
 template<class T>using VV=V<V<T>>;
-using Int=long long;
-using dd=long double;
+using Int=int64_t;
+using dd=double;
 // === ACL ====
 #include <atcoder/all>
 using mint = atcoder::modint1000000007;
@@ -34,57 +34,58 @@ void _solve() {
     V<Int> A(N);
     cin >> A;
 
-    //
-    dd ok = 0.0;
-    dd ng = 1e9 + 2.0;
-    range(101) {
-        auto mid = (ok + ng) / 2.0;
-        ;
-        auto isOk = [&]() -> bool {
-            V<V<dd>> dp = V<V<dd>>(N + 1, V<dd>(2, 0.0));
+    auto solveAverage = [&]() {
+        dd ok = 0.0;
+        dd ng = 1e9 + 2.0;
+        range(65) {
+            auto mid = (ok + ng) / 2.0;
+            auto isOk = [&]() -> bool {
+                V<V<dd>> dp = V<V<dd>>(N + 1, V<dd>(2, 0.0));
 
-            range(i, 0, N) {
-                dp[i + 1][1] = max(dp[i][1], dp[i][0]) + ((dd)A[i] - mid);
-                dp[i + 1][0] = dp[i][1];
-            }
-            return max(dp[N][0], dp[N][1]) >= 0.0;
-        };
-        if (isOk()) {
-            ok = mid;
-        } else {
-            ng = mid;
+                range(i, 0, N) {
+                    dp[i + 1][1] = max(dp[i][1], dp[i][0]) + ((dd)A[i] - mid);
+                    dp[i + 1][0] = dp[i][1];
+                }
+                return max(dp[N][0], dp[N][1]) >= 0.0;
+            };
+            if (isOk())
+                ok = mid;
+            else
+                ng = mid;
         }
-    }
-    cout << ok << endl;
-    // 平均値ここまで
+        cout << ok << endl;
+    };
 
-    Int ok2 = 0.0;
-    Int ng2 = 1e9 + 1;
-    while (ng2 - ok2 > 1) {
-        Int mid = (ok2 + ng2) / 2;
-
-        auto isOk = [&]() -> bool {
-            V<V<Int>> dp = V<V<Int>>(N + 1, V<Int>(2, 0));
-            range(i, 0, N) {
-                dp[i + 1][1] =
-                    max(dp[i][1], dp[i][0]) + ((A[i] - mid >= 0) ? 1 : -1);
-                dp[i + 1][0] = dp[i][1];
+    auto solveMedian = [&]() {
+        Int ok = 0.0;
+        Int ng = 1e9 + 1;
+        while (ng - ok > 1) {
+            Int mid = (ok + ng) / 2;
+            auto isOk = [&]() -> bool {
+                V<V<Int>> dp = V<V<Int>>(N + 1, V<Int>(2, 0));
+                range(i, 0, N) {
+                    dp[i + 1][1] =
+                        max(dp[i][1], dp[i][0]) + ((A[i] - mid >= 0) ? 1 : -1);
+                    dp[i + 1][0] = dp[i][1];
+                }
+                return max(dp[N][0], dp[N][1]) > 0;
+            };
+            if (isOk()) {
+                ok = mid;
+            } else {
+                ng = mid;
             }
-            return max(dp[N][0], dp[N][1]) > 0;
-        };
-        if (isOk()) {
-            ok2 = mid;
-        } else {
-            ng2 = mid;
         }
-    }
-    cout << ok2 << endl;
+        cout << ok << endl;
+    };
+
+    solveAverage();
+    solveMedian();
 }
 
 signed main() {
     cout << setprecision(12);
     ios::sync_with_stdio(false);
-    assert(true);
     _solve();
     return 0;
 }
