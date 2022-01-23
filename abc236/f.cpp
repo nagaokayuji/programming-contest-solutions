@@ -28,33 +28,38 @@ ostream &operator<<(ostream &os,const mint x){os<<x.val();return os;}
 // clang-format on
 
 void _solve() {
-    int N;
-    cin >> N;
-    V<Int> C((1 << N) - 1);
-    cin >> C;
-    Int ans = 0;
-    V<Int> dp = V<Int>(N, 1e9 + 3);
-    set<Int> used;
-    range(bts, 0, 1 << N) {
-        int v = 1;
-        if (used.find(bts) != used.end()) continue;
-        range(b, N) {
-            if (bit(bts, b)) {
-                if (chmin(dp[b], C[bts - 1])) {
-                    v = bts;
-                };
-            }
-        }
-        used.insert(v);
+  int N;
+  cin >> N;
+  V<int> C(1 << N);
+  cin >> C;
+
+  V<pair<int, int>> vp(1 << N);
+  range(i, 1 << N) vp[i] = make_pair(C[i], i + 1);
+  sort(all(vp));
+
+  Int ans = 0;
+  V<int> b(N);
+  each(x, vp) {
+    int c = x.first;
+    int bt = x.second;
+
+    range(i, N) if (bit(bt, i)) bt ^= b[i];
+
+    if (bt == 0) continue;
+
+    ans += c;
+    range(i, N) if (bit(bt, i)) {
+      b[i] = bt;
+      break;
     }
-    each(x, dp) ans += x;
-    cout << ans << endl;
+  }
+  cout << ans << endl;
 }
 
 signed main() {
-    cout << setprecision(12);
-    ios::sync_with_stdio(false);
-    assert(true);
-    _solve();
-    return 0;
+  cout << setprecision(12);
+  ios::sync_with_stdio(false);
+  assert(true);
+  _solve();
+  return 0;
 }
