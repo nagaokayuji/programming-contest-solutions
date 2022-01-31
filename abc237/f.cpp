@@ -32,33 +32,34 @@ ostream &operator<<(ostream &os,const mint x){os<<x.val();return os;}
 void _solve() {
   int N, M;
   cin >> N >> M;
+  vector dp(N + 1, V<V<V<mint>>>(11, V<V<mint>>(11, V<mint>(11, 0))));
 
-  V<V<V<mint>>> dp(N + 1, V<V<mint>>(11, V<mint>(5)));
-  // dp[0][1][0] = 1;
-  // dp[1]
-  for (int i = 1; i <= M; i++) {
-    dp[1][i][1] = 1;
-  }
+  dp[0][M][M][M] = 1;
 
-  // rep(i, N) {
-  for (int i = 1; i < N; i++) {
-    for (int j = 1; j <= M; j++) {
-      rep(k, 4) {
-        for (int nxtj = 1; nxtj <= j; nxtj++) {
-          dp[i + 1][j][k] += dp[i][j][k];
-        }
+  rep(i, N) {
+    rep(a, M + 1) {
+      rep(b, M + 1) {
+        rep(c, M + 1) {
+          auto value = dp[i][a][b][c];
+          if (value == 0) continue;
 
-        for (int nxtj = j + 1; nxtj <= M; nxtj++) {
-          dp[i + 1][nxtj][k + 1] += dp[i][j][k];
+          auto &ndp = dp[i + 1];
+          rep(nxd, M) {
+            if (nxd <= a) {
+              ndp[nxd][b][c] += value;
+            } else if (nxd <= b) {
+              ndp[a][nxd][c] += value;
+            } else if (nxd <= c) {
+              ndp[a][b][nxd] += value;
+            }
+          }
         }
       }
     }
   }
-  dbg(dp);
   mint ans = 0;
-  for (int i = 1; i <= M; i++) {
-    ans += dp[N][i][3];
-  }
+  auto &last = dp[N];
+  rep(a, M) rep(b, M) rep(c, M) ans += last[a][b][c];
   cout << ans << endl;
 }
 
