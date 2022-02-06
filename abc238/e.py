@@ -62,7 +62,6 @@ class DSU:
 
 
 def _solve():
-    ''''''
     N, Q = li()
     LR = [tuple(li()) for _ in range(Q)]
     LR.sort(key=lambda x: x[1])

@@ -15,18 +15,20 @@ def li1(): return list(map(lambda x: int(x)-1, input().split()))
 def yn(a): print("Yes" if a else "No")
 
 
+def acc(n):
+    return n*(n+1)//2 % MOD
+
+
 def _solve():
     N = int(input())
 
-    def sumlr(l, r):
-        return (r*(r+1)//2 - l*(l-1)//2) % MOD
     ans = 0
     base = 1
     while base * 10 - 1 < N:
-        ans += sumlr(0, base*9)
+        ans += acc(base*9)
         ans %= MOD
         base *= 10
-    ans += sumlr(0, N-base+1)
+    ans += acc(N-base+1)
     ans %= MOD
     print(ans)
 
