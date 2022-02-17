@@ -51,6 +51,7 @@ void _solve() {
         if ((filled[i + 1][j] || A[i + 1][j] == c) &&
             (filled[i][j + 1] || A[i][j + 1] == c) &&
             (filled[i + 1][j + 1] || A[i + 1][j + 1] == c)) {
+          dbg2(i, j);
           ans.emplace_back(i, j, c);
           filled[i][j] = filled[i][j + 1] = filled[i + 1][j] =
               filled[i + 1][j + 1] = 1;
@@ -62,6 +63,7 @@ void _solve() {
         if ((filled[i][j] || A[i][j] == c) &&
             (filled[i][j + 1] || A[i][j + 1] == c) &&
             (filled[i + 1][j + 1] || A[i + 1][j + 1] == c)) {
+          dbg2(i, j);
           ans.emplace_back(i, j, c);
           filled[i][j] = filled[i][j + 1] = filled[i + 1][j] =
               filled[i + 1][j + 1] = 1;
@@ -70,9 +72,22 @@ void _solve() {
 
         c = A[i][j + 1];
         if (filled[i][j + 1]) continue;
-        if ((filled[i][j + 1] || A[i][j + 1] == c) &&
+        if ((filled[i + 1][j] || A[i + 1][j] == c) &&
             (filled[i][j + 1] || A[i][j + 1] == c) &&
             (filled[i + 1][j + 1] || A[i + 1][j + 1] == c)) {
+          dbg2(i, j);
+          ans.emplace_back(i, j, c);
+          filled[i][j] = filled[i][j + 1] = filled[i + 1][j] =
+              filled[i + 1][j + 1] = 1;
+          updated = true;
+        }
+
+        c = A[i + 1][j + 1];
+        if (filled[i + 1][j + 1]) continue;
+        if ((filled[i][j] || A[i][j] == c) &&
+            (filled[i][j + 1] || A[i][j + 1] == c) &&
+            (filled[i + 1][j + 1] || A[i + 1][j + 1] == c)) {
+          dbg2(i, j);
           ans.emplace_back(i, j, c);
           filled[i][j] = filled[i][j + 1] = filled[i + 1][j] =
               filled[i + 1][j + 1] = 1;
@@ -98,7 +113,7 @@ void _solve() {
     cout << ans.size() << endl;
     each(x, ans) {
       auto [a, b, c] = x;
-      cout << ++a << " " << ++b << " " << c << endl;
+      cout << a + 1 << " " << b + 1 << " " << c << endl;
     }
   } else {
     cout << -1 << endl;
